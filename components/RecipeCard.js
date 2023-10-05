@@ -6,7 +6,7 @@ import { Card, Button } from "@rneui/themed";
 export default function RecipeCard(props) {
 
   const handleButtonPress = () => {
-    console.log(props.id);
+    props.navigation.navigate('Recipe',{id: props.id})
   }
 
   return (
