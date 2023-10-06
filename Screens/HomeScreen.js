@@ -1,6 +1,6 @@
 import React from "react";
 
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { StyleSheet, FlatList, Text, View, ScrollView } from "react-native";
 import RecipeCard from "../components/RecipeCard";
 
 const DUMMY = [
@@ -66,22 +66,36 @@ const DUMMY = [
     },
   ]
 
-const HomeScreen = ({navigation}) => {
-  return (
-    <ScrollView>
-      {DUMMY.map((item) => {
-        return (
-          <RecipeCard
-            image={item.image}
-            title={item.title}
-            key={item.id}
-            id={item.id}
-            navigation={navigation}
-          />
-        );
-      })}
-    </ScrollView>
-  );
-};
-
-export default HomeScreen;
+  const HomeScreen = ({ navigation }) => {
+    const renderItem = ({ item }) => {
+      return (
+        <RecipeCard
+          image={item.image}
+          title={item.title}
+          id={item.id}
+          navigation={navigation}
+        />
+      );
+    };
+  
+    return (
+      <View style={styles.container}>
+        <FlatList
+          data={DUMMY}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id.toString()}
+          numColumns={2} // Display two columns
+        />
+      </View>
+    );
+  };
+  
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'space-between',
+      alignItems: 'center'
+    },
+  });
+  
+  export default HomeScreen;
