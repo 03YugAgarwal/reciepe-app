@@ -1,8 +1,6 @@
 import { Text, View, Image, TouchableWithoutFeedback } from "react-native";
 import React, { Component, useState } from "react";
 
-import { Card, Button } from "@rneui/themed";
-
 export default function RecipeCard(props) {
   const handleButtonPress = () => {
     props.navigation.navigate("Recipe", { id: props.id });
@@ -18,25 +16,6 @@ export default function RecipeCard(props) {
           margin: 2,
         }}
       >
-        {/* <Card style={{ width: "50%" }}>
-        <Card.Image
-        style={{ padding: 0 }}
-        source={{
-          uri: props.image,
-        }}
-        />
-        <Card.Title>{props.title}</Card.Title>
-        <Button
-        title="View Recipe"
-        buttonStyle={{
-            borderColor: "rgba(78, 116, 289, 1)",
-          }}
-          type="outline"
-          raised
-          titleStyle={{ color: "rgba(78, 116, 289, 1)" }}
-          onPress={handleButtonPress}
-          />
-        </Card> */}
         <Image
           source={{ uri: props.image }}
           alt={props.title}

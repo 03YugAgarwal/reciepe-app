@@ -5,16 +5,85 @@ import {
   Image,
   Dimensions,
   StyleSheet,
+  FlatList,
   SectionList,
 } from "react-native";
 import { API_KEY } from "@env";
 import { Button, Icon } from "@rneui/themed";
+import RecipeCard from "../components/RecipeCard";
+
+const DUMMY = [
+  {
+    id: 782585,
+    image: "https://spoonacular.com/recipeImages/782585-312x231.jpg",
+    imageType: "jpg",
+    title: "Cannellini Bean and Asparagus Salad with Mushrooms",
+  },
+  {
+    id: 716426,
+    image: "https://spoonacular.com/recipeImages/716426-312x231.jpg",
+    imageType: "jpg",
+    title: "Cauliflower, Brown Rice, and Vegetable Fried Rice",
+  },
+  {
+    id: 715497,
+    image: "https://spoonacular.com/recipeImages/715497-312x231.jpg",
+    imageType: "jpg",
+    title: "Berry Banana Breakfast Smoothie",
+  },
+  {
+    id: 715415,
+    image: "https://spoonacular.com/recipeImages/715415-312x231.jpg",
+    imageType: "jpg",
+    title: "Red Lentil Soup with Chicken and Turnips",
+  },
+  {
+    id: 716406,
+    image: "https://spoonacular.com/recipeImages/716406-312x231.jpg",
+    imageType: "jpg",
+    title: "Asparagus and Pea Soup: Real Convenience Food",
+  },
+  {
+    id: 644387,
+    image: "https://spoonacular.com/recipeImages/644387-312x231.jpg",
+    imageType: "jpg",
+    title: "Garlicky Kale",
+  },
+  {
+    id: 715446,
+    image: "https://spoonacular.com/recipeImages/715446-312x231.jpg",
+    imageType: "jpg",
+    title: "Slow Cooker Beef Stew",
+  },
+  {
+    id: 782601,
+    image: "https://spoonacular.com/recipeImages/782601-312x231.jpg",
+    imageType: "jpg",
+    title: "Red Kidney Bean Jambalaya",
+  },
+  {
+    id: 795751,
+    image: "https://spoonacular.com/recipeImages/795751-312x231.jpg",
+    imageType: "jpg",
+    title: "Chicken Fajita Stuffed Bell Pepper",
+  },
+  {
+    id: 766453,
+    image: "https://spoonacular.com/recipeImages/766453-312x231.jpg",
+    imageType: "jpg",
+    title: "Hummus and Za'atar",
+  },
+]
 
 const RecipeScreen = ({ navigation, route }) => {
   const { width } = Dimensions.get("window");
 
   const [recipe, setRecipe] = useState({});
   const [loading, setLoading] = useState(true);
+
+  const [loadSimilar, setLoadSimilar] = useState(null)
+  const [loadSimilarLoading, setLoadSimilarLoading] = useState(false)
+
 
   useEffect(() => {
     fetch(
@@ -29,7 +98,14 @@ const RecipeScreen = ({ navigation, route }) => {
   }, []);
 
   const handleLoadSimilar = () => {
-    console.log("Handle similar");
+    setLoadSimilarLoading(true)
+    fetch(`https://api.spoonacular.com/recipes/${route.params.id}/similar?apiKey=${API_KEY}&number=10`)
+    .then((response) => response.json())
+    .then((json) => {
+      setLoadSimilar(json);
+      console.log(json);
+    })
+    .catch((error) => console.error(error));
   };
 
   return (
@@ -41,7 +117,18 @@ const RecipeScreen = ({ navigation, route }) => {
       ]}
       renderItem={({ item }) => (
         <View style={styles.container}>
-          {loading && <Text>Loading... Please wait</Text>}
+          {loading && (
+            <Text
+              style={{
+                marginTop: 100,
+                fontSize: 24,
+                fontWeight: "bold",
+                textAlign: "center",
+              }}
+            >
+              Loading... Please wait
+            </Text>
+          )}
           {!loading && (
             <View>
               <Image
@@ -175,11 +262,34 @@ const RecipeScreen = ({ navigation, route }) => {
                   margin: 10,
                 }}
               >
-                <Button onPress={handleLoadSimilar}>
+                <Button onPress={handleLoadSimilar} disabled={loadSimilarLoading}>
                   {" "}
                   Load similar recipes?{" "}
                 </Button>
               </View>
+              {loadSimilar && <View
+                style={{
+                  flex: 1,
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <FlatList
+                  data={loadSimilar}
+                  renderItem={({ item }) => {
+                    return (
+                      <RecipeCard
+                        image={"../assets/placedholder.jpg"}
+                        title={item.title}
+                        id={item.id}
+                        navigation={navigation}
+                      />
+                    );
+                  }}
+                  keyExtractor={(item) => item.id.toString()}
+                  numColumns={2} 
+                />
+              </View>}
             </View>
           )}
         </View>
