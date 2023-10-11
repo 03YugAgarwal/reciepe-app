@@ -10,9 +10,13 @@ import { API_KEY } from "@env";
 import HomeScreen from "./Screens/HomeScreen";
 import RecipeScreen from "./Screens/RecipeScreen";
 import IngredientScreen from "./Screens/IngredientScreen";
+import SearchScreen from "./Screens/SearchScreen";
+import SearchIngredients from './Screens/SearchIngredients'
+
 import { Icon } from "@rneui/themed";
 
 const Stack = createStackNavigator();
+const StackIngredient = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function StackNavigation() {
@@ -24,7 +28,21 @@ function StackNavigation() {
     >
       <Stack.Screen name="HomePage" component={HomeScreen} />
       <Stack.Screen name="Recipe" component={RecipeScreen} />
+      <Stack.Screen name="Search" component={SearchScreen} />
     </Stack.Navigator>
+  );
+}
+function StackNavigationIngredients() {
+  return (
+    <StackIngredient.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <StackIngredient.Screen name="HomePage" component={IngredientScreen} />
+      <StackIngredient.Screen name="Recipe" component={RecipeScreen} />
+      <StackIngredient.Screen name="Search" component={SearchIngredients} />
+    </StackIngredient.Navigator>
   );
 }
 
@@ -47,14 +65,15 @@ const BottomTabNavigator = () => {
       />
       <Tab.Screen
         name="Ingredients"
-        component={IngredientScreen}
+        component={StackNavigationIngredients}
         options={{
-          tabBarLabel: "Ingredients",
+          tabBarLabel: "Menu-Items",
           tabBarIcon: ({ color, size }) => {
             return <Icon name="fruit-watermelon" type="material-community" />;
           },
         }}
       />
+
     </Tab.Navigator>
   );
 };

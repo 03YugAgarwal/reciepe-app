@@ -1,5 +1,5 @@
+import React from "react";
 import { Text, View, Image, TouchableWithoutFeedback } from "react-native";
-import React, { Component, useState } from "react";
 
 export default function RecipeCard(props) {
   const handleButtonPress = () => {
@@ -7,7 +7,7 @@ export default function RecipeCard(props) {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={handleButtonPress} >
+    <TouchableWithoutFeedback onPress={handleButtonPress}>
       <View
         style={{
           width: "48%",
